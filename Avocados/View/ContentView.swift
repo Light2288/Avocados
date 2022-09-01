@@ -33,6 +33,17 @@ struct ContentView: View {
                     .padding(.trailing, 20)
                 }
                 
+                Text("Avocado Recipes")
+                    .fontWeight(.bold)
+                    .modifier(TitleModifier())
+                VStack(alignment: .center, spacing: 20) {
+                    ForEach(recipesData) { recipe in
+                        RecipeCardView(recipe: recipe)
+                    }
+                }
+                .frame(maxWidth: 640)
+                .padding(.horizontal)
+                
                 Text("Avocado Dishes")
                     .fontWeight(.bold)
                     .modifier(TitleModifier())
