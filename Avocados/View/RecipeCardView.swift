@@ -10,6 +10,8 @@ import SwiftUI
 struct RecipeCardView: View {
     // MARK: - Properties
     var recipe: Recipe
+    var hapticImpat = UIImpactFeedbackGenerator(style: .heavy)
+    @State private var showModal: Bool = false
     
     // MARK: - Body
     var body: some View {
@@ -44,30 +46,9 @@ struct RecipeCardView: View {
                     .foregroundColor(.gray)
                     .italic()
                 
-                HStack(alignment: .center, spacing: 5) {
-                    ForEach(0...(recipe.rating), id: \.self) { _ in
-                        Image(systemName: "star.fill")
-                            .font(.body)
-                        .foregroundColor(.yellow)
-                    }
-                }
+                RecipeRatingView(recipe: recipe)
                 
-                HStack(alignment: .center, spacing: 12) {
-                    HStack(alignment: .center, spacing: 2) {
-                        Image(systemName: "person.2")
-                        Text("Serves: \(recipe.serves)")
-                    }
-                    HStack(alignment: .center, spacing: 2) {
-                        Image(systemName: "clock")
-                        Text("Prep: \(recipe.preparation)")
-                    }
-                    HStack(alignment: .center, spacing: 2) {
-                        Image(systemName: "flame")
-                        Text("Cooking: \(recipe.cooking)")
-                    }
-                }
-                .font(.footnote)
-                .foregroundColor(.gray)
+                RecipeCookingView(recipe: recipe)
             }
             .padding()
             .padding(.bottom, 12)
@@ -75,6 +56,13 @@ struct RecipeCardView: View {
         .background(.white)
         .cornerRadius(12)
         .shadow(color: Color("ColorBlackTransparentLight"), radius: 8, x: 0, y: 0)
+        .onTapGesture {
+            self.hapticImpat.impactOccurred()
+            self.showModal = true
+        }
+        .sheet(isPresented: self.$showModal) {
+            RecipeDetailView(recipe: recipe)
+        }
     }
 }
 
